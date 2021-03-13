@@ -11,24 +11,30 @@ class WorldTime{
   WorldTime({this.location, this.flag, this.pos});
 
   Future<void> getTime() async{
-    Uri url = Uri.parse('https://worldtimeapi.org/api/timezone/$pos');
-    Response response = await get(url);
-    // print(response.body);
-    Map data  = jsonDecode(response.body);
-    // print(data);
-    String datetime = data['datetime'];
-    String offsetHour = data['utc_offset'].substring(1,3);
-    String offsetMinutes = data['utc_offset'].substring(4,6);
-    // print(datetime);
-    // print(offset);
+    try {
+      Uri url = Uri.parse('https://worldtimeapi.org/api/timezone/$pos');
+      Response response = await get(url);
+      // print(response.body);
+      Map data = jsonDecode(response.body);
+      // print(data);
+      String datetime = data['datetime'];
+      String offsetHour = data['utc_offset'].substring(1, 3);
+      String offsetMinutes = data['utc_offset'].substring(4, 6);
+      // print(datetime);
+      // print(offset);
 
 
-    // create Datetime object
-    DateTime now = DateTime.parse(datetime);
-    now = now.add(Duration(hours:int.parse(offsetHour),minutes: int.parse(offsetMinutes)));
+      // create Datetime object
+      DateTime now = DateTime.parse(datetime);
+      now = now.add(Duration(
+          hours: int.parse(offsetHour), minutes: int.parse(offsetMinutes)));
 
-    // set the time property;
-    time  = now.toString();
-
+      // set the time property;
+      time = now.toString()
+    }
+  }
+  catch(e){
+    print("There is an error :$e");
+    time = "Couldn't find!!";
   }
 }
